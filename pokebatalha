@@ -1,0 +1,280 @@
+def efetividade(pokemonEU, pokemonInimigo):
+  tipoEU=pokemonEU[1]
+  if tipoEU == 'fogo':
+    fracoEU='agua'
+    forteEU='grama'
+    neutroEU=['fogo', 'normal']
+  elif tipoEU == 'agua':
+    fracoEU='grama'
+    forteEU='fogo'
+    neutroEU=['agua', 'normal']
+  elif tipoEU=='grama':
+    fracoEU='fogo'
+    forteEU='agua'
+    neutroEU=['grama', 'normal']
+  elif tipoEU == 'normal':
+    forteEU=""
+    fracoEU=""
+    neutroEU=['fogo', 'agua', 'grama', 'normal']
+    
+  tipoInimigo=pokemonInimigo[1]
+  if tipoInimigo == 'fogo':
+    fracoInimigo='agua'
+    forteInimigo='grama'
+    neutroInimigo=['fogo', 'normal']
+  elif tipoInimigo == 'agua':
+    fracoInimigo='grama'
+    forteInimigo='fogo'
+    neutroInimigo=['agua', 'normal']
+  elif tipoInimigo=='grama':
+    fracoInimigo='fogo'
+    forteInimigo='agua'
+    neutroInimigo=['grama', 'normal']
+  elif tipoInimigo == 'normal':
+    forteInimigo=""
+    fracoInimigo=""
+    neutroInimigo=['fogo', 'agua', 'grama', 'normal'] 
+  
+  if tipoInimigo == forteEU:
+    buff=2
+  elif tipoInimigo == fracoEU:
+    buff=0.5
+  elif tipoInimigo in (neutroEU):
+    buff=1
+  if tipoEU == forteInimigo:
+    buffinimigo=2
+  elif tipoEU == fracoInimigo:
+    buffinimigo=0.5
+  elif tipoEU in (neutroEU):
+    buffinimigo=1
+    
+  return(buff, buffinimigo)
+def golpe(pokemonEU, pokemonInimigo):
+  meudano = int(((((2* int(pokemonEU[2])) + 10) / 250) * (int(pokemonEU[4])/int(pokemonInimigo[5]) * int(pokemonEU[-1])) + 2) * (buff))
+  danodele = int(((((2* int(pokemonInimigo[2])) + 10) / 250) * (int(pokemonInimigo[4])/int(pokemonEU[5]) * int(pokemonInimigo[-1])) + 2) * (buffinimigo))
+  return (meudano, danodele)
+pokemonEU=input().split(", ")
+vidaEU=int(pokemonEU[3])
+foguetinhoperdeu=False
+morri=False
+danototalinimigo=0
+print(f"escolho você {pokemonEU[0]}")
+while foguetinhoperdeu==False and morri==False:
+  fuga=False
+  venci=False
+  danototalEU=0
+  tipodecombate=input()
+  if tipodecombate == 'um pokemon selvagem aparece!':
+    pokemonInimigo=input().split(", ")
+    vidaDoinimigo=int(pokemonInimigo[3])
+    print("vamo botar pra quebrar!")
+    print()
+    buff, buffinimigo=efetividade(pokemonEU, pokemonInimigo)
+    while fuga == False and venci==False and morri==False:
+      comando=input()
+      if comando == 'correr':
+        fuga=True
+      elif comando == 'atacar':
+        if int(pokemonEU[6])>int(pokemonInimigo[6]):
+          eucomeço=True
+        else:
+          eucomeço=False
+        
+        meudano, danodele=golpe(pokemonEU, pokemonInimigo)
+       
+        
+        if eucomeço==True:
+        
+          danototalEU+=meudano
+          contadorDeVidainimigo=vidaDoinimigo - danototalEU
+          if contadorDeVidainimigo<0:
+            contadorDeVidainimigo=0
+            
+          contadorDeVidaEU=vidaEU - danototalinimigo
+          if contadorDeVidaEU<0:
+            contadorDeVidaEU=0
+ 
+            
+          print(f"{pokemonEU[0]} usou {pokemonEU[-2]}")
+          if buff == 2:
+            print("foi super efetivo!")
+          elif buff == 0.5:
+            print("não foi muito efetivo")
+          if danototalEU >= vidaDoinimigo:
+            print(f"HP: {contadorDeVidaEU}/{vidaEU} | HP inimigo: {contadorDeVidainimigo}/{vidaDoinimigo}")
+            print(f"{pokemonInimigo[0]} derrotado!")
+            venci=True
+            print()
+            
+          else:
+            
+            danototalinimigo+=danodele
+            contadorDeVidaEU=vidaEU - danototalinimigo
+            if contadorDeVidaEU<0:
+              contadorDeVidaEU=0
+              
+            
+            print(f"{pokemonInimigo[0]} usou {pokemonInimigo[-2]}")
+            if buffinimigo == 2:
+              print("foi super efetivo!")
+            elif buffinimigo == 0.5:
+              print("não foi muito efetivo")
+            print(f"HP: {contadorDeVidaEU}/{vidaEU} | HP inimigo: {contadorDeVidainimigo}/{vidaDoinimigo}")
+          if danototalinimigo >= vidaEU:
+            print(f"{pokemonEU[0]} derrotado!")
+            morri=True
+            print()
+            
+        elif eucomeço == False:
+          
+          danototalinimigo+=danodele
+          contadorDeVidaEU=vidaEU - danototalinimigo
+          if contadorDeVidaEU<0:
+            contadorDeVidaEU=0
+          
+          contadorDeVidainimigo=vidaDoinimigo - danototalEU
+          if contadorDeVidainimigo<0:
+            contadorDeVidainimigo=0
+          
+          print(f"{pokemonInimigo[0]} usou {pokemonInimigo[-2]}")
+          if buffinimigo == 2:
+              print("foi super efetivo!")
+          elif buffinimigo == 0.5:
+              print("não foi muito efetivo")
+          
+          if danototalinimigo >= vidaEU:
+            print(f"HP: {contadorDeVidaEU}/{vidaEU} | HP inimigo: {contadorDeVidainimigo}/{vidaDoinimigo}")
+            print(f"{pokemonEU[0]} derrotado!")
+            morri=True
+            print()
+          else:
+            
+            danototalEU+=meudano
+            contadorDeVidainimigo=vidaDoinimigo - danototalEU
+            if contadorDeVidainimigo<0:
+              contadorDeVidainimigo=0
+            
+            
+            print(f"{pokemonEU[0]} usou {pokemonEU[-2]}")
+            if buff == 2:
+              print("foi super efetivo!")
+            elif buff == 0.5:
+              print("não foi muito efetivo")
+            print(f"HP: {contadorDeVidaEU}/{vidaEU} | HP inimigo: {contadorDeVidainimigo}/{vidaDoinimigo}")
+            if danototalEU >= vidaDoinimigo:
+              print(f"{pokemonInimigo[0]} derrotado!")
+              venci=True
+              print()
+            
+              
+
+          
+  elif tipodecombate == 'Equipe Rocket':
+      pokemonInimigo=input().split(", ")
+      vidaDoinimigo=int(pokemonInimigo[3])
+      print(f"{pokemonEU[0]}, bora acabar com a raça desses bandidos e salvar o professor!")
+      print()
+      while venci == False and morri == False and foguetinhoperdeu==False:
+        comando=input()
+        buff, buffinimigo=efetividade(pokemonEU, pokemonInimigo)
+        if comando == 'correr':
+          while comando == 'correr':
+            print("lascou, eles não largam do meu pé!")
+            comando=input()
+        if comando=='atacar':
+          if int(pokemonEU[6])>int(pokemonInimigo[6]):
+            eucomeço=True
+          else:
+            eucomeço=False
+          
+          meudano, danodele=golpe(pokemonEU, pokemonInimigo)
+        
+          
+          if eucomeço==True:
+          
+            danototalEU+=meudano
+            contadorDeVidainimigo=vidaDoinimigo - danototalEU
+            if contadorDeVidainimigo<0:
+              contadorDeVidainimigo=0
+              
+            contadorDeVidaEU=vidaEU - danototalinimigo
+            if contadorDeVidaEU<0:
+              contadorDeVidaEU=0
+  
+              
+            print(f"{pokemonEU[0]} usou {pokemonEU[-2]}")
+            if buff == 2:
+              print("foi super efetivo!")
+            elif buff == 0.5:
+              print("não foi muito efetivo")
+            
+            if danototalEU >= vidaDoinimigo:
+              print(f"HP: {contadorDeVidaEU}/{vidaEU} | HP inimigo: {contadorDeVidainimigo}/{vidaDoinimigo}")
+              print(f"{pokemonInimigo[0]} derrotado!")
+              foguetinhoperdeu=True
+              print()
+            else:
+              
+              danototalinimigo+=danodele
+              contadorDeVidaEU=vidaEU - danototalinimigo
+              if contadorDeVidaEU<0:
+                contadorDeVidaEU=0
+                
+              
+              print(f"{pokemonInimigo[0]} usou {pokemonInimigo[-2]}")
+              if buffinimigo == 2:
+                print("foi super efetivo!")
+              elif buffinimigo == 0.5:
+                print("não foi muito efetivo")
+              print(f"HP: {contadorDeVidaEU}/{vidaEU} | HP inimigo: {contadorDeVidainimigo}/{vidaDoinimigo}")
+            if danototalinimigo >= vidaEU:
+              print(f"{pokemonEU[0]} derrotado!")
+              morri=True
+              print()
+              
+          elif eucomeço == False:
+            
+            danototalinimigo+=danodele
+            contadorDeVidaEU=vidaEU - danototalinimigo
+            if contadorDeVidaEU<0:
+              contadorDeVidaEU=0
+            
+            contadorDeVidainimigo=vidaDoinimigo - danototalEU
+            if contadorDeVidainimigo<0:
+              contadorDeVidainimigo=0
+            
+            print(f"{pokemonInimigo[0]} usou {pokemonInimigo[-2]}")
+            if buffinimigo == 2:
+                print("foi super efetivo!")
+            elif buffinimigo == 0.5:
+                print("não foi muito efetivo")
+            
+            if danototalinimigo >= vidaEU:
+              print(f"HP: {contadorDeVidaEU}/{vidaEU} | HP inimigo: {contadorDeVidainimigo}/{vidaDoinimigo}")
+              print(f"{pokemonEU[0]} derrotado!")
+              morri=True
+              print()
+            else:
+              
+              danototalEU+=meudano
+              contadorDeVidainimigo=vidaDoinimigo - danototalEU
+              if contadorDeVidainimigo<0:
+                contadorDeVidainimigo=0
+              
+              
+              print(f"{pokemonEU[0]} usou {pokemonEU[-2]}")
+              if buff == 2:
+                print("foi super efetivo!")
+              elif buff == 0.5:
+                print("não foi muito efetivo")
+              print(f"HP: {contadorDeVidaEU}/{vidaEU} | HP inimigo: {contadorDeVidainimigo}/{vidaDoinimigo}")
+              if danototalEU >= vidaDoinimigo:
+                print(f"{pokemonInimigo[0]} derrotado!")
+                foguetinhoperdeu=True
+                print()
+if foguetinhoperdeu == True:
+  print(f"Ufa, derrotei esses bandidos, consegui resgatar o professor! Está pronto para uma nova jornada {pokemonEU[0]}?")
+elif morri == True:
+  print(f"Você perdeu esta batalha, infelizmente não conseguiu salvar o professor.")
+    
+  
